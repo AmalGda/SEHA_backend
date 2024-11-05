@@ -28,6 +28,7 @@ const userSchema = mongoose.Schema(
     password: { type: String, required: true, unique: true },
     token: String,
     socialLoginSchema: socialLoginSchema,
+    relatives: [{ type: mongoose.Schema.Types.ObjectId, ref: "Relative" }],
   },
   { timestamps: true }
 );
