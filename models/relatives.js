@@ -6,11 +6,9 @@ const relativeSchema = mongoose.Schema({
   user_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "users",
-    required: [
-      true,
-      "User not found. Unable to add relative person. Operation aborted.",
-    ],
+    required: [true, "User ID is required."],
   },
+  pathologies: [{ type: mongoose.Schema.Types.ObjectId, ref: "Pathology" }],
   gender: { type: String },
   yearOfBirth: { type: Date },
   city: { type: String },
