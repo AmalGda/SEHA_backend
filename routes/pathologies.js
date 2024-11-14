@@ -7,11 +7,27 @@ const Relative = require("../models/relatives");
 const User = require("../models/users");
 
 /* Get pathology data */
-router.get("/get/:relative_id", authMiddleware, async (req, res) => {
+router.get("/get/:_id/", authMiddleware, async (req, res) => {
+  const { _id } = req.params;
   try {
-    const { relative_id } = req.params;
-    const pathologyDoc = await Pathology.findOne({ _id }).select;
-    if (pathologyDoc) {
+    const user = req.user;
+
+    const query = _id
+      ? { user_id: user, _id, relative_id: relative }
+      : { user_id: user, relative_id: relative };
+    const resDocs = await Pathology.find(query).select("-relative_id");
+    const json =
+      resDocs.length > 0
+        ? {
+            result: true,
+            type: resDocs.length > 1 ? "multiple" : "unique",
+            relatives: resDocs,
+            number_relatives: resDocs.length,
+          }
+        : { result: false, error: "Relative not found" };
+
+    res.json(json);
+    if (resDocs) {
       res.json({ result: true, pathologyDoc: pathologyDoc });
     } else {
       res.json({ result: false, user: "no data" });
