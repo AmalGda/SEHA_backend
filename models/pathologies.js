@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+//Sous document traitement
+
 const pathologySchema = mongoose.Schema(
   {
     relative_id: {
@@ -12,7 +14,7 @@ const pathologySchema = mongoose.Schema(
     nameOfDiagnosticPhysician: { type: String },
     symptoms: [{ type: String }],
     treatmentInProgress: { type: Boolean },
-    /* treatments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Treatment" }], */
+    /* treatments: */
     additionalComment: { type: String },
   },
   { timestamps: true }
