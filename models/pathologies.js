@@ -31,9 +31,8 @@ const pathologySchema = mongoose.Schema(
     nameOfDiagnosticPhysician: { type: String },
     symptoms: [{ type: String }],
     treatmentInProgress: { type: Boolean },
-    treatments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Treatment" }],
     additionalComment: { type: String },
-    treatment: treatmentSchema,
+    treatments: [treatmentSchema],
   },
   { timestamps: true }
 );
