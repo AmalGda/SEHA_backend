@@ -1,6 +1,23 @@
 const mongoose = require("mongoose");
 
-//Sous document traitement
+const treatmentSchema = mongoose.Schema(
+  {
+    brand: { type: String },
+    dosage: { type: String },
+    halfOrWhole: { type: Boolean },
+    frequency: {
+      type: String,
+      enum: ["quotidien", "hebdomadaire", "mensuel", "annuel"],
+    },
+    lenghOfTreatment: { type: String },
+    sideEffect: [{ sideEffect: String }],
+    drugAdministration: { type: String },
+    modeAdministration: { type: String },
+    treatmentStartDate: { type: Date },
+    treatmentEndDate: { type: Date },
+  },
+  { timestamps: true }
+);
 
 const pathologySchema = mongoose.Schema(
   {
@@ -16,6 +33,7 @@ const pathologySchema = mongoose.Schema(
     treatmentInProgress: { type: Boolean },
     treatments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Treatment" }],
     additionalComment: { type: String },
+    treatment: treatmentSchema,
   },
   { timestamps: true }
 );

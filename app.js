@@ -9,7 +9,6 @@ const auth = require("./middlewares/authMiddleware");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var relativesRouter = require("./routes/relatives");
-var pathologiesRouter = require("./routes/pathologies");
 
 var app = express();
 const cors = require("cors");
@@ -24,6 +23,5 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/relatives", relativesRouter);
-app.use("/pathologies", pathologiesRouter);
 
 module.exports = app;

@@ -23,8 +23,6 @@ const authMiddleware = async (req, res, next) => {
 
     if (userId) {
       req.user = userId;
-      console.log("tn id",userId);
-      console.log("Ton token", token);
       next();
     } else {
       res.status(404).json({ result: false, error: "User not found" });
