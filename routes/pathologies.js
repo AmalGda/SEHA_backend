@@ -85,59 +85,78 @@ router.post(
     }
   }
 );
-
-const delParams = { request: "params", key: ["_id"] };
-
-router.delete(
-  "/delete/:_id",
-
-  checkRequestKey(delParams),
-  authMiddleware,
-
-  async (req, res) => {
-    const _id = req.params._id;
-    const user_id = req.user;
-    try {
-      const relative = await Relative.findOne({ _id: relative_id, user_id });
-      const pathology = await Pathology.findOneAndDelete({ _id });
-
-      if (!pathology && relative) {
-        return res
-
-          .status(404)
-
-          .json({ result: false, message: "Pathology not found" });
-      }
-
-      return res
-        .status(200)
-        .json({ result: true, message: "Pathology deleted" });
-    } catch (err) {
-      console.log(err);
-
-      res.status(500).json({ result: false, error: "An error has occurred" });
-    }
-  }
-);
-const updateParam = { request: "body", key: ["_id"] };
-
-router.put("/update", checkRequestKey(updateParam), async (req, res) => {
+/* DELETE ROUTE*/
+router.delete("/delete/:relative_id", authMiddleware, async (req, res) => {
+  const { relative_id } = req.params;
+  const user_id = req.user;
   try {
-    const _id = req.body._id;
+    const relative = await Relative.findOne({ _id: relative_id, user_id });
+    if (!relative) {
+      return res
 
-    const pathologyDoc = await Pathology.findOneAndUpdate(
-      { _id },
+        .status(404)
 
-      { $set: { ...req.body } },
+        .json({ result: false, message: "Acces denied" });
+    }
+    const { pathology_id } = req.body;
+    if (!pathology_id) {
+      return res
+        .status(400)
+        .json({ result: false, message: "Pathology ID is required" });
+    }
 
-      { new: true }
-    );
+    const pathology = await Pathology.findOneAndDelete({ _id: pathology_id });
+    if (!pathology) {
+      return res
 
-    res.json({ result: true, pathology: pathologyDoc });
+        .status(404)
+
+        .json({ result: false, message: "Pathology not found" });
+    }
+    return res.status(200).json({ result: true, message: "Pathology deleted" });
   } catch (err) {
     console.log(err);
 
     res.status(500).json({ result: false, error: "An error has occurred" });
+  }
+});
+/* UPDATE ROUTE */
+router.put("/update/:relative_id", authMiddleware, async (req, res) => {
+  const { relative_id } = req.params;
+  const user_id = req.user;
+
+  console.log("Mon user_id", user_id);
+  try {
+    const relative = await Relative.findOne({ _id: relative_id, user_id });
+    if (!relative) {
+      return res.status(404).json({ result: false, message: "Access denied" });
+    }
+
+    const { pathology_id } = req.body;
+    if (!pathology_id) {
+      return res
+        .status(400)
+        .json({ result: false, message: "Pathology ID is required" });
+    }
+
+    const pathology = await Pathology.findOneAndUpdate(
+      { _id: pathology_id, relative_id },
+      { $set: { ...req.body } },
+      { new: true }
+    );
+
+    if (!pathology) {
+      return res
+        .status(404)
+        .json({ result: false, message: "Pathology not found" });
+    }
+
+    return res.status(200).json({ result: true, pathologyDoc: pathology });
+  } catch (err) {
+    console.log(err);
+    return res
+      .status(500)
+      .json({ result: false, error: "An error has occurred" });
   }
 });
 
