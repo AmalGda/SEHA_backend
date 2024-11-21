@@ -46,7 +46,8 @@ const addPathology = {
     "yearOfScreening",
     "nameOfDiagnosticPhysician",
     "symptoms",
-    "treatmentInProgress" /* "treatments" */,
+    "treatmentInProgress",
+    "treatments",
     "additionalComment",
   ],
 };
@@ -65,6 +66,7 @@ router.post(
         symptoms,
         treatmentInProgress,
         additionalComment,
+        treatments,
       } = req.body;
 
       //Add a new pathology
@@ -74,7 +76,7 @@ router.post(
         yearOfScreening,
         nameOfDiagnosticPhysician,
         symptoms,
-        //traitement
+        treatments,
         treatmentInProgress,
         additionalComment,
       });
@@ -124,8 +126,6 @@ router.delete("/delete/:relative_id", authMiddleware, async (req, res) => {
 router.put("/update/:relative_id", authMiddleware, async (req, res) => {
   const { relative_id } = req.params;
   const user_id = req.user;
-
-  console.log("Mon user_id", user_id);
   try {
     const relative = await Relative.findOne({ _id: relative_id, user_id });
     if (!relative) {
@@ -158,6 +158,20 @@ router.put("/update/:relative_id", authMiddleware, async (req, res) => {
       .status(500)
       .json({ result: false, error: "An error has occurred" });
   }
+});
+
+/* POST TREATMENT*/
+const addTreatmentParam = {
+  key: ["pathology_id", "treatment[brand]", "expenses[category]"],
+};
+router.post("/treatment/add", authMiddleware, async (req, res) => {
+  const { pathology_id } = req.body;
+  const { relative_id } = req.body;
+  try {
+    const addExpense = await Pathology.updateOne({
+      $and: [{ relative_id: relative_id }, { _id: pathology_id }],
+    });
+  } catch (error) {}
 });
 
 module.exports = router;
