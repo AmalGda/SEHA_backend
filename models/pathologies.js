@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const treatmentSchema = mongoose.Schema(
+const treatmentsSchema = mongoose.Schema(
   {
     brand: { type: String },
     dosage: { type: String },
@@ -31,9 +31,8 @@ const pathologySchema = mongoose.Schema(
     nameOfDiagnosticPhysician: { type: String },
     symptoms: [{ type: String }],
     treatmentInProgress: { type: Boolean },
-    treatments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Treatment" }],
+    treatments: [treatmentsSchema],
     additionalComment: { type: String },
-    treatment: treatmentSchema,
   },
   { timestamps: true }
 );
