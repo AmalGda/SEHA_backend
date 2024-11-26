@@ -23,10 +23,9 @@ const userSchema = mongoose.Schema(
         message: ({ value }) => `${value} is not an email`,
       },
     },
-    yearOfBirth: { type: Date },
     password: { type: String, required: true, unique: true },
     token: String,
-    socialLoginSchema: socialLoginSchema,
+    /*  socialLoginSchema: socialLoginSchema, */
     relatives: [{ type: mongoose.Schema.Types.ObjectId, ref: "Relative" }],
   },
   { timestamps: true }
