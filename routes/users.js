@@ -24,20 +24,19 @@ router.get("/get/:token", async (req, res) => {
 /* SIGN UP USERS */
 const signUpParams = {
   request: "body",
-  key: ["firstname", "lastname", "email", "yearOfBirth", "password"],
+  key: ["username", "email", "password"],
 };
 router.post("/signup", checkRequestKey(signUpParams), async (req, res) => {
-  const { firstname, lastname, email, yearOfBirth, password } = req.body;
+  const { username, lastname, email, password } = req.body;
 
   try {
     const userDoc = await User.findOne({ email });
     if (userDoc === null) {
       const hash = bcrypt.hashSync(password, 10);
       const newUser = new User({
-        firstname,
+        username,
         lastname,
         email,
-        yearOfBirth,
         password: hash,
         token: uid2(32),
       });
@@ -104,16 +103,16 @@ router.put("/update", checkRequestKey(updateParam), async (req, res) => {
 });
 
 /* ROUTE DELETE */
-const delParams = { request: "params", key: ["firstname"] };
+const delParams = { request: "params", key: ["username"] };
 
 router.delete(
-  "/delete/:firstname",
+  "/delete/:username",
   checkRequestKey(delParams),
   async (req, res) => {
-    const firstname = req.params.firstname;
+    const username = req.params.username;
 
     try {
-      const user = await User.findOneAndDelete({ firstname });
+      const user = await User.findOneAndDelete({ username });
 
       if (!user) {
         return res
