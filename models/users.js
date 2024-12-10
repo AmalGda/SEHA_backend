@@ -27,6 +27,7 @@ const userSchema = mongoose.Schema(
     token: String,
     /*  socialLoginSchema: socialLoginSchema, */
     relatives: [{ type: mongoose.Schema.Types.ObjectId, ref: "Relative" }],
+    pathologies: [{ type: mongoose.Schema.Types.ObjectId, ref: "Pathology" }],
   },
   { timestamps: true }
 );
