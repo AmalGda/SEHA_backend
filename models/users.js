@@ -13,8 +13,7 @@ const socialLoginSchema = mongoose.Schema(
 
 const userSchema = mongoose.Schema(
   {
-    firstname: { type: String, required: true, trim: true },
-    lastname: { type: String, required: true, trim: true },
+    username: { type: String, required: true, trim: true },
     email: {
       type: String,
       required: true,
@@ -29,6 +28,7 @@ const userSchema = mongoose.Schema(
     token: String,
     socialLoginSchema: socialLoginSchema,
     relatives: [{ type: mongoose.Schema.Types.ObjectId, ref: "Relative" }],
+    pathologies: [{ type: mongoose.Schema.Types.ObjectId, ref: "Pathology" }],
   },
   { timestamps: true }
 );
