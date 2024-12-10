@@ -27,15 +27,13 @@ const signUpParams = {
   key: ["username", "email", "password"],
 };
 router.post("/signup", checkRequestKey(signUpParams), async (req, res) => {
-  const { username, lastname, email, password } = req.body;
-
+  const { username, email, password } = req.body;
   try {
     const userDoc = await User.findOne({ email });
     if (userDoc === null) {
       const hash = bcrypt.hashSync(password, 10);
       const newUser = new User({
         username,
-        lastname,
         email,
         password: hash,
         token: uid2(32),
@@ -67,6 +65,7 @@ router.post("/signin", checkRequestKey(signInParams), async (req, res) => {
 
     if (userDoc && bcrypt.compareSync(password, userDoc.password)) {
       res.json({ result: true, token: userDoc.token });
+      console.log(req.body);
     } else {
       res.json({
         result: false,
