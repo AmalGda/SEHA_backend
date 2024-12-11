@@ -58,13 +58,13 @@ router.post("/signup", checkRequestKey(signUpParams), async (req, res) => {
 /* SIGN IN USERS */
 const signInParams = {
   request: "body",
-  key: ["email", "password"],
+  key: ["username", "password"],
 };
 router.post("/signin", checkRequestKey(signInParams), async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   try {
-    const userDoc = await User.findOne({ email });
+    const userDoc = await User.findOne({ username });
 
     if (userDoc && bcrypt.compareSync(password, userDoc.password)) {
       res.json({ result: true, token: userDoc.token });
