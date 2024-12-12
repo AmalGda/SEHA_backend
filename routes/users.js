@@ -24,20 +24,18 @@ router.get("/get/:token", async (req, res) => {
 /* SIGN UP USERS */
 const signUpParams = {
   request: "body",
-  key: ["firstname", "lastname", "email", "yearOfBirth", "password"],
+  key: ["username", "email", "password"],
 };
 router.post("/signup", checkRequestKey(signUpParams), async (req, res) => {
-  const { firstname, lastname, email, yearOfBirth, password } = req.body;
+  const { username, email, password } = req.body;
 
   try {
     const userDoc = await User.findOne({ email });
     if (userDoc === null) {
       const hash = bcrypt.hashSync(password, 10);
       const newUser = new User({
-        firstname,
-        lastname,
+        username,
         email,
-        yearOfBirth,
         password: hash,
         token: uid2(32),
       });
